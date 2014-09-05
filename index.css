@@ -1,0 +1,35 @@
+@font-face {
+  font-family: 'Goudy Bookletter';
+  src: url('GoudyBookletter1911.otf');
+}
+
+.title {
+  font-family: "Goudy Bookletter", Georgia, serif;
+  margin-top: 100px;
+  text-align: center;
+}
+
+.button {
+  padding: 0.3em 0.8em;
+  background-image: linear-gradient(hsl(357, 77%, 60%), hsl(357, 76%, 50%));
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.medium {
+  font-size: 16px;
+}
+
+.spinner {
+  width: 100px;
+  height: 100px;
+  margin: 20px auto;
+  background-color: yellowgreen;
+  border-radius: 50%;
+}
+
+.spinner-button {
+  display: block;
+  margin: 0px auto;
+}
