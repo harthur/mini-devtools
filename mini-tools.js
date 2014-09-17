@@ -2,18 +2,30 @@ var errors = [];
 
 window.onerror = function(msg, url, line, col, err) {
   errors.push({msg: msg, url: url, line: line});
-  miniTools.updateErrorBox();
+  miniTools.updateErrors();
 }
 
 document.addEventListener("DOMContentLoaded", function() {
   miniTools.createUI();
-  miniTools.updateErrorBox();
+  miniTools.updateErrors();
+});
+
+window.addEventListener("load", function() {
+  var loaded = Date.now();
+  var navigated = performance.timing.navigationStart;
+  var loadTime = loaded - navigated;
+
+  miniTools.updateLoadTime(loadTime);
 });
 
 
 var miniTools = {
+  updateLoadTime: function(loadTime) {
+    var seconds = loadTime / 1000;
+    this.timeElem.textContent = seconds + "s";
+  },
 
-  updateErrorBox: function() {
+  updateErrors: function() {
     var countText = "";
     var color = "#0d0";
 
@@ -81,6 +93,7 @@ var miniTools = {
     this.countElem = count;
 
     setStyle(count, {
+      display: "inline-block",
       width: "20px",
       height: "20px",
       "margin-top": "4px",
@@ -89,7 +102,8 @@ var miniTools = {
       "border": "1px solid #555",
       "text-align": "center",
       "color": "white",
-      "cursor": "pointer"
+      "cursor": "pointer",
+      "vertical-align": "middle"
     })
 
     bar.appendChild(count);
@@ -113,6 +127,32 @@ var miniTools = {
     errors.hidden = true;
 
     this.initPopup();
+
+    var timing = document.createElement("div");
+    timing.className = "mini-tools-timing";
+    setStyle(timing, {
+      display: "inline-block",
+      height: "20px",
+      "margin-top": "3px",
+      "margin-left": "10px",
+      "vertical-align": "middle"
+    })
+    this.timingElem = timing;
+
+    var load = document.createElement("load");
+    load.textContent = "load: ";
+    timing.appendChild(load);
+
+    var time = document.createElement("span");
+    setStyle(time, {
+      "font-family": "monospace",
+      "font-size": "122%",
+      "color": "blue"
+    })
+    this.timeElem = time;
+    timing.appendChild(time);
+
+    bar.appendChild(timing);
 
     document.body.appendChild(bar);
     document.body.appendChild(errors);
