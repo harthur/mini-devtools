@@ -8,6 +8,7 @@ window.onerror = function(msg, url, line, col, err) {
 document.addEventListener("DOMContentLoaded", function() {
   miniTools.createUI();
   miniTools.updateErrors();
+  miniTools.initInspector();
 });
 
 window.addEventListener("load", function() {
@@ -45,6 +46,36 @@ var miniTools = {
     }.bind(this));
   },
 
+  initInspector: function() {
+    var prevElem;
+    function inspectDoc(event) {
+      var elem = document.elementFromPoint(event.clientX, event.clientY);
+
+      if (elem == prevElem) {
+        return;
+      }
+      elem.style.outline = "1px dotted black";
+      if (prevElem) {
+        prevElem.style.outline = "none";
+      }
+      prevElem = elem;
+
+      miniTools.nodeInfoElem.textContent = getSelectorFor(elem);
+    }
+
+    this.inspectButtonElem.addEventListener("click", function() {
+      if (!this.inspecting) {
+        document.addEventListener("mousemove", inspectDoc);
+        this.inspecting = true;
+      }
+      else {
+        document.removeEventListener("mousemove", inspectDoc);
+        this.inspecting = false;
+        this.nodeInfoElem.textContent = "";
+        this.inspectButtonElem.style.outline = "none";
+      }
+    }.bind(this))
+  },
 
   /*****************************
    * Pre-made UI code
@@ -72,6 +103,7 @@ var miniTools = {
   },
 
   createUI: function() {
+    // create the mini tools bar
     var bar = document.createElement("div");
     this.barElem = bar;
 
@@ -88,6 +120,7 @@ var miniTools = {
       "font-family": "Helvetica Neue, sans-serif"
     });
 
+    // create the error display
     var count = document.createElement("div");
     count.className = "mini-tools-error-count";
     this.countElem = count;
@@ -128,6 +161,7 @@ var miniTools = {
 
     this.initPopup();
 
+    // create load time indicator
     var timing = document.createElement("div");
     timing.className = "mini-tools-timing";
     setStyle(timing, {
@@ -146,13 +180,47 @@ var miniTools = {
     var time = document.createElement("span");
     setStyle(time, {
       "font-family": "monospace",
-      "font-size": "122%",
+      "font-size": "123%",
       "color": "blue"
     })
     this.timeElem = time;
     timing.appendChild(time);
 
     bar.appendChild(timing);
+
+    // create the inspector button
+    var inspector = document.createElement("div");
+    setStyle(inspector, {
+      display: "inline-block",
+      "float": "right",
+      "margin-right": "10px",
+      "margin-top": "4px"
+    });
+
+    var nodeInfo = document.createElement("div");
+    setStyle(nodeInfo, {
+      display: "inline-block",
+      width: "200px",
+      "text-align": "right",
+      "margin-right": "10px",
+      "vertical-align": "middle",
+      "font-family": "monospace"
+    });
+    this.nodeInfoElem = nodeInfo;
+    inspector.appendChild(nodeInfo);
+
+    var inspectButton = document.createElement("div");
+    setStyle(inspectButton, {
+      display: "inline-block",
+      "vertical-align": "middle",
+      "margin-right": "10px",
+      "cursor": "pointer",
+    });
+    inspectButton.textContent = "⊞";
+    this.inspectButtonElem = inspectButton;
+    inspector.appendChild(inspectButton);
+
+    bar.appendChild(inspector);
 
     document.body.appendChild(bar);
     document.body.appendChild(errors);
@@ -209,4 +277,15 @@ function getOffset(elem) {
     top: rect.top  + window.pageYOffset,
     left: rect.left + window.pageXOffset
   };
+}
+
+function getSelectorFor(elem) {
+  var selector = elem.nodeName.toLowerCase();
+  if (elem.id) {
+    selector += elem.id;
+  }
+  for (var i = 0; i < elem.classList.length; i++) {
+    selector += "." + elem.classList[i];
+  }
+  return selector;
 }
