@@ -44,17 +44,17 @@ var miniTools = {
 
     var span = document.createElement("span");
     span.textContent = fileName(error.url) + ":" + error.line;
+
     setStyle(span, {
       "margin-left": "0.4em",
       "color": "grey"
     })
-
     div.appendChild(span);
 
     setStyle(div, {
       padding: "0.4em",
       "border-bottom": "1px solid #CCC"
-    })
+    });
 
     return div;
   },
@@ -99,7 +99,7 @@ var miniTools = {
     this.errorsElem = errors;
 
     setStyle(errors, {
-      width: "200px",
+      width: "260px",
       "max-height": "400px",
       background: "white",
       "z-index": 99999,
@@ -107,7 +107,8 @@ var miniTools = {
       border: "3px solid #BBB",
       "border-radius": "2px",
       "box-shadow": "-2px -2px 5px #CCC",
-      "font-family": "Helvetica Neue, sans-serif"
+      "font-family": "Helvetica Neue, sans-serif",
+      "overflow": "hidden"
     });
     errors.hidden = true;
 
@@ -141,7 +142,7 @@ var miniTools = {
 
     setStyle(this.errorsElem, {
       left: offset.left + "px",
-      top: (offset.top - 108) + "px"
+      bottom: 30 + "px"
     });
   }
 }
