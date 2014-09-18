@@ -56,3 +56,10 @@
   display: block;
   margin: 0px auto;
 }
+
+.link {
+  text-align: center;
+  margin-top: 40px;
+  font-family: Helvetica Neue, sans-serif;
+  font-size: 180%;
+}
