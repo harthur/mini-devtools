@@ -1,5 +1,4 @@
 (function() {
-
 // FILL IN
 
 var miniTools = {
@@ -16,6 +15,30 @@ var miniTools = {
   /************************
    * Pre-made setup code
    ************************/
+
+  updateErrorCount: function(count) {
+    var countText = "";
+    if (count) {
+      countText = count;
+    }
+    if (errors.length) {
+      this.countElem.style.background = "#d00";
+    }
+    else {
+      this.countElem.style.background = "#0d0";
+    }
+    this.countElem.textContent = countText;
+  },
+
+  updateMessages: function() {
+    // update error messages list
+    clearChildren(this.errorsElem);
+
+    errors.forEach(function(error) {
+      var elem = this.createMessageElem(error);
+      this.errorsElem.appendChild(elem);
+    }.bind(this));
+  },
 
   toggle: function() {
     if (this.initialized) {
@@ -60,32 +83,6 @@ var miniTools = {
     this.nodeInfoElem = null;
 
     this.initialized = false;
-  },
-
-  updateMessages: function(errors) {
-    // update error messages list
-    clearChildren(this.errorsElem);
-
-    errors.forEach(function(error) {
-      var elem = this.createMessageElem(error);
-      this.errorsElem.appendChild(elem);
-    }.bind(this));
-  },
-
-  updateErrorCount: function(count) {
-    var countText = "";
-    if (count) {
-      countText = count;
-    }
-    this.countElem.textContent = countText;
-  },
-
-  turnCountRed: function() {
-    this.countElem.style.background = "#d00";
-  },
-
-  turnCountGreen: function() {
-    this.countElem.style.background = "#0d0";
   },
 
   initInspector: function() {
