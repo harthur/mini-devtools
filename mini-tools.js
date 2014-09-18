@@ -83,6 +83,16 @@ var miniTools = {
   destroy: function() {
     document.removeEventListener("DOMContentLoaded", this.onContentLoad);
     window.removeEventListener("load", this.onLoad);
+
+    this.barElem.parentNode.removeChild(this.barElem);
+    this.errorsElem.parentNode.removeChild(this.errorsElem);
+    this.barElem = null;
+    this.errorsElem = null;
+    this.countElem = null;
+    this.timingElem = null;
+    this.timeElem = null;
+    this.nodeInfoElem = null;
+
     this.initialized = false;
   },
 
@@ -233,7 +243,7 @@ var miniTools = {
     setStyle(inspector, {
       display: "inline-block",
       "float": "right",
-      "margin-right": "10px",
+      "margin-right": "6px",
       "margin-top": "4px"
     });
 
@@ -252,14 +262,34 @@ var miniTools = {
     setStyle(inspectButton, {
       display: "inline-block",
       "vertical-align": "middle",
-      "margin-right": "10px",
+      "margin-right": "18px",
       "cursor": "pointer",
+      "font-size": "110%"
     });
     inspectButton.textContent = "⊞";
     this.inspectButtonElem = inspectButton;
     inspector.appendChild(inspectButton);
 
     bar.appendChild(inspector);
+
+    var closeButton = document.createElement("div");
+    setStyle(closeButton, {
+      display: "inline-block",
+      "vertical-align": "middle",
+      "cursor": "pointer",
+      "color": "hsl(0, 50%, 40%)",
+      "font-weight": "bold",
+      "background-color": "hsl(0, 50%, 70%)",
+      "border-radius": "3px",
+      "padding": "0 3px 0 3px"
+    });
+    closeButton.textContent = "✕";
+    this.closeElem = closeButton;
+    closeButton.addEventListener("click", function() {
+      this.destroy();
+    }.bind(this))
+
+    inspector.appendChild(closeButton);
 
     document.body.appendChild(bar);
     document.body.appendChild(errors);
