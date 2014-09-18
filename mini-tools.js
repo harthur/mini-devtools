@@ -5,22 +5,21 @@ window.onerror = function(msg, url, line, col, err) {
   miniTools.updateErrors();
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-  miniTools.createUI();
-  miniTools.updateErrors();
-  miniTools.initInspector();
-});
-
-window.addEventListener("load", function() {
-  var loaded = Date.now();
-  var navigated = performance.timing.navigationStart;
-  var loadTime = loaded - navigated;
-
-  miniTools.updateLoadTime(loadTime);
-});
-
-
 var miniTools = {
+  onContentLoad: function() {
+    this.createUI();
+    this.updateErrors();
+    this.initInspector();
+  },
+
+  onLoad: function() {
+    var loaded = performance.timing.loadEventEnd || Date.now();
+    var navigated = performance.timing.navigationStart;
+    var loadTime = loaded - navigated;
+
+    this.updateLoadTime(loadTime);
+  },
+
   updateLoadTime: function(loadTime) {
     var seconds = loadTime / 1000;
     this.timeElem.textContent = seconds + "s";
@@ -44,6 +43,44 @@ var miniTools = {
       var elem = this.createMessageElem(error);
       this.errorsElem.appendChild(elem);
     }.bind(this));
+  },
+
+  /*********************
+   * Pre-made setup code
+   *********************/
+  toggle: function() {
+    if (this.initialized) {
+      this.destroy();
+    }
+    else {
+      this.init();
+    }
+  },
+
+  init: function() {
+    this.onContentLoad = this.onContentLoad.bind(this);
+    this.onLoad = this.onLoad.bind(this);
+
+    if (document.readyState == "interactive"
+       || document.readyState == "complete") {
+      this.onContentLoad();
+    }
+    else {
+      document.addEventListener("DOMContentLoaded", this.onContentLoad);
+    }
+    if (document.readyState == "complete") {
+      this.onLoad();
+    }
+    else {
+      window.addEventListener("load", this.onLoad);
+    }
+    this.initialized = true;
+  },
+
+  destroy: function() {
+    document.removeEventListener("DOMContentLoaded", this.onContentLoad);
+    window.removeEventListener("load", this.onLoad);
+    this.initialized = false;
   },
 
   initInspector: function() {
@@ -288,3 +325,5 @@ function getSelectorFor(elem) {
   }
   return selector;
 }
+
+miniTools.toggle();
