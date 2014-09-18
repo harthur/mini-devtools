@@ -44,7 +44,7 @@
   color: hsl(257, 80%, 30%);
   font-size: 220%;
   padding-top: 80px;
-  transition: color 2s;
+  transition: color 2s, text-shadow 2s;
   letter-spacing: 2px;
 }
 
