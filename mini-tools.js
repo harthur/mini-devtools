@@ -19,32 +19,20 @@ var miniTools = {
     var navigated = performance.timing.navigationStart;
     var loadTime = loaded - navigated;
 
-    this.updateLoadTime(loadTime);
-  },
-
-  updateLoadTime: function(loadTime) {
     var seconds = loadTime / 1000;
     this.timeElem.textContent = seconds + "s";
   },
 
   updateErrors: function() {
-    var countText = "";
-    var color = "#0d0";
-
     if (errors.length) {
-      countText = errors.length;
-      color = "#d00";
+      this.turnCountRed();
     }
-    this.countElem.textContent = countText;
-    this.countElem.style.background = color;
+    else {
+      this.turnCountGreen();
+    }
+    this.updateErrorCount(errors.length);
 
-    // update error messages list
-    clearChildren(this.errorsElem);
-
-    errors.forEach(function(error) {
-      var elem = this.createMessageElem(error);
-      this.errorsElem.appendChild(elem);
-    }.bind(this));
+    this.updateMessages(errors);
   },
 
   /************************
@@ -94,6 +82,32 @@ var miniTools = {
     this.nodeInfoElem = null;
 
     this.initialized = false;
+  },
+
+  updateMessages: function(errors) {
+    // update error messages list
+    clearChildren(this.errorsElem);
+
+    errors.forEach(function(error) {
+      var elem = this.createMessageElem(error);
+      this.errorsElem.appendChild(elem);
+    }.bind(this));
+  },
+
+  updateErrorCount: function(count) {
+    var countText = "";
+    if (count) {
+      countText = count;
+    }
+    this.countElem.textContent = countText;
+  },
+
+  turnCountRed: function() {
+    this.countElem.style.background = "#d00";
+  },
+
+  turnCountGreen: function() {
+    this.countElem.style.background = "#0d0";
   },
 
   initInspector: function() {
