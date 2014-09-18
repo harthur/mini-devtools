@@ -3,6 +3,11 @@
   src: url('GoudyBookletter1911.otf');
 }
 
+@font-face {
+  font-family: 'Blackout Midnight';
+  src: url('BlackoutMidnight.ttf');
+}
+
 .title {
   font-family: "Goudy Bookletter", Georgia, serif;
   margin-top: 100px;
@@ -22,11 +27,25 @@
 }
 
 .spinner {
-  width: 100px;
-  height: 100px;
+  width: 240px;
+  height: 240px;
   margin: 20px auto;
-  background-color: yellowgreen;
+  background-color: hsl(257, 80%, 30%);
   border-radius: 50%;
+  text-align: center;
+}
+
+.chosen-tools {
+  font-family: "Blackout Midnight", sans-serf;
+  color: hsl(257, 80%, 30%);
+  font-size: 220%;
+  padding-top: 80px;
+  transition: color 2s;
+  letter-spacing: 2px;
+}
+
+.chosen-tools.show {
+  color: white;
 }
 
 .spinner-button {
