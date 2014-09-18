@@ -1,3 +1,5 @@
+(function() {
+
 var errors = [];
 
 window.onerror = function(msg, url, line, col, err) {
@@ -45,9 +47,10 @@ var miniTools = {
     }.bind(this));
   },
 
-  /*********************
+  /************************
    * Pre-made setup code
-   *********************/
+   ************************/
+
   toggle: function() {
     if (this.initialized) {
       this.destroy();
@@ -327,3 +330,5 @@ function getSelectorFor(elem) {
 }
 
 miniTools.toggle();
+
+})();
